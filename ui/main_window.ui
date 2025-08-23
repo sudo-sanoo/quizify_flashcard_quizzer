@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(240, 240, 236);</string>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextUnderIcon</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="quizifyLabel">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>60</y>
+      <width>801</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="tabletTracking">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(46, 46, 46);</string>
+    </property>
+    <property name="text">
+     <string>Improve your Grades with Quizify</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="flashcardSet">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>150</y>
+      <width>241</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 238, 230);
+color: rgb(46, 46, 46);
+font: 600 11pt &quot;Segoe UI&quot;;
+border-radius: 20px;
+border: 1px solid rgb(204, 204, 204);
+</string>
+    </property>
+    <property name="text">
+     <string>Create your Flashcards</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="quizzesBtn">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>150</y>
+      <width>241</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 238, 230);
+color: rgb(46, 46, 46);
+font: 600 11pt &quot;Segoe UI&quot;;
+border-radius: 20px;
+border: 1px solid rgb(204, 204, 204);</string>
+    </property>
+    <property name="text">
+     <string>Tests yourself with Quizzes!</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHome">
+    <property name="title">
+     <string>Home</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuFlashcard_Sets">
+    <property name="title">
+     <string>Flashcard Sets</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuQuizzes">
+    <property name="title">
+     <string>Quizzes</string>
+    </property>
+   </widget>
+   <addaction name="menuHome"/>
+   <addaction name="menuFlashcard_Sets"/>
+   <addaction name="menuQuizzes"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

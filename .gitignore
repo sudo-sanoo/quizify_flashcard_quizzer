@@ -1,16 +1,56 @@
 # Virtual environment
 venv/
+ENV/
+env/
+venv.bak/
+
+# Python caches and compiled files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# VS Code settings
+# Generated UI Python files
+ui/*.py
+
+# Qt Designer backups and resources
+*.ui~
+*.qrc~
+*.qrc.py
+
+# VS Code & IDEs
 .vscode/
-
-# Environment files
-.env
-*.sqlite
-*.db
+.idea/
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+~$*
+
+# Secrets / environment files
+.env
+.env.*
+secrets/
+secrets.json
+*.key
+*.pem
+
+# Local DBs and caches
+*.sqlite
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Archives and installers
+*.zip
+*.tar.gz
+
+# OneDrive / sync/temp files
+*.tmp
+*.part
+*.~lock.*
+
+
+.git/
