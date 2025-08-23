@@ -1,8 +1,5 @@
 # Virtual environment
 venv/
-ENV/
-env/
-venv.bak/
 
 # Python caches and compiled files
 __pycache__/
@@ -47,10 +44,8 @@ secrets.json
 *.zip
 *.tar.gz
 
-# OneDrive / sync/temp files
 *.tmp
 *.part
 *.~lock.*
-
 
 .git/
