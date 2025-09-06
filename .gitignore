@@ -5,6 +5,7 @@ venv/
 __pycache__/
 *.py[cod]
 *$py.class
+flashcards.json
 
 # Generated UI Python files
 ui/*.py
