@@ -20,81 +20,310 @@
    <enum>Qt::ToolButtonTextUnderIcon</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="quizifyLabel">
-    <property name="geometry">
-     <rect>
-      <x>-10</x>
-      <y>60</y>
-      <width>801</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="tabletTracking">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(46, 46, 46);</string>
-    </property>
-    <property name="text">
-     <string>Improve your Grades with Quizify</string>
-    </property>
-    <property name="scaledContents">
-     <bool>false</bool>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignHCenter|Qt::AlignTop</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="flashcardSet">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>150</y>
-      <width>241</width>
-      <height>341</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(242, 238, 230);
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="homepage">
+       <widget class="QLabel" name="quizifyLabel">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>50</y>
+          <width>782</width>
+          <height>36</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="tabletTracking">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Improve your Grades with Quizify</string>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="quizzesBtn">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>120</y>
+          <width>301</width>
+          <height>381</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(242, 238, 230);
+color: rgb(46, 46, 46);
+font: 600 11pt &quot;Segoe UI&quot;;
+border-radius: 20px;
+border: 1px solid rgb(204, 204, 204);</string>
+        </property>
+        <property name="text">
+         <string>Tests yourself with Quizzes!</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="flashcardSet">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>120</y>
+          <width>301</width>
+          <height>381</height>
+         </rect>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(242, 238, 230);
 color: rgb(46, 46, 46);
 font: 600 11pt &quot;Segoe UI&quot;;
 border-radius: 20px;
 border: 1px solid rgb(204, 204, 204);
 </string>
-    </property>
-    <property name="text">
-     <string>Create your Flashcards</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="quizzesBtn">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>150</y>
-      <width>241</width>
-      <height>341</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(242, 238, 230);
-color: rgb(46, 46, 46);
-font: 600 11pt &quot;Segoe UI&quot;;
-border-radius: 20px;
-border: 1px solid rgb(204, 204, 204);</string>
-    </property>
-    <property name="text">
-     <string>Tests yourself with Quizzes!</string>
-    </property>
-   </widget>
+        </property>
+        <property name="text">
+         <string>Create your Flashcards Sets</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="homePage">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Home</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="setPage">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Flashcard Sets</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="quizzesPage">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Quizzes</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="flashcardsets">
+       <widget class="QPushButton" name="homePage_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Home</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="setPage_2">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Flashcard Sets</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="quizzesPage_2">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Quizzes</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>771</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 20px;
+font-weight: 800;
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Your Flashcard Sets</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="listWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>80</y>
+          <width>781</width>
+          <height>451</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="quizzespage">
+       <widget class="QPushButton" name="homePage_3">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Home</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="setPage_3">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Flashcard Sets</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="quizzesPage_3">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>0</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid rgb(204, 204, 204);
+background-color: rgb(242, 238, 230);
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Quizzes</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>40</y>
+          <width>771</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-size: 20px;
+font-weight: 800;
+color: #000;</string>
+        </property>
+        <property name="text">
+         <string>Your Quizzes</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -105,24 +334,6 @@ border: 1px solid rgb(204, 204, 204);</string>
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHome">
-    <property name="title">
-     <string>Home</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuFlashcard_Sets">
-    <property name="title">
-     <string>Flashcard Sets</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuQuizzes">
-    <property name="title">
-     <string>Quizzes</string>
-    </property>
-   </widget>
-   <addaction name="menuHome"/>
-   <addaction name="menuFlashcard_Sets"/>
-   <addaction name="menuQuizzes"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

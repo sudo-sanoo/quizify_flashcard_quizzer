@@ -174,7 +174,7 @@ color: rgb(0, 0, 0);</string>
 color: rgb(0, 0, 0);</string>
             </property>
            </widget>
-           <widget class="QLineEdit" name="lineEdit_2">
+           <widget class="QTextEdit" name="textEdit">
             <property name="geometry">
              <rect>
               <x>70</x>
@@ -184,11 +184,7 @@ color: rgb(0, 0, 0);</string>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);
-color: rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <string notr="true">color: #000;</string>
             </property>
            </widget>
           </widget>
@@ -256,38 +252,6 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Vertical</enum>
             </property>
            </widget>
-           <widget class="QLineEdit" name="lineEdit_3">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>70</y>
-              <width>331</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="lineEdit_4">
-            <property name="geometry">
-             <rect>
-              <x>360</x>
-              <y>70</y>
-              <width>341</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
            <widget class="QLabel" name="label_6">
             <property name="geometry">
              <rect>
@@ -311,7 +275,36 @@ color: rgb(0, 0, 0);</string>
              </rect>
             </property>
             <property name="text">
-             <string>Description</string>
+             <string>Detail</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_2">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>331</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_3">
+            <property name="geometry">
+             <rect>
+              <x>360</x>
+              <y>70</y>
+              <width>341</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
             </property>
            </widget>
           </widget>
@@ -373,7 +366,7 @@ border-radius: 5px;</string>
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QFrame" name="frame_6">
+          <widget class="QFrame" name="frame_3">
            <property name="geometry">
             <rect>
              <x>20</x>
@@ -392,7 +385,7 @@ color: rgb(0, 0, 0);</string>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <widget class="QLabel" name="label_8">
+           <widget class="QLabel" name="label_5">
             <property name="geometry">
              <rect>
               <x>10</x>
@@ -421,7 +414,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-           <widget class="Line" name="line_7">
+           <widget class="Line" name="line_4">
             <property name="geometry">
              <rect>
               <x>340</x>
@@ -437,39 +430,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Vertical</enum>
             </property>
            </widget>
-           <widget class="QLineEdit" name="lineEdit_5">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>70</y>
-              <width>331</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="lineEdit_6">
-            <property name="geometry">
-             <rect>
-              <x>360</x>
-              <y>70</y>
-              <width>341</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="label_8">
             <property name="geometry">
              <rect>
               <x>160</x>
@@ -482,7 +443,7 @@ color: rgb(0, 0, 0);</string>
              <string>Item</string>
             </property>
            </widget>
-           <widget class="QLabel" name="label_10">
+           <widget class="QLabel" name="label_9">
             <property name="geometry">
              <rect>
               <x>500</x>
@@ -492,11 +453,40 @@ color: rgb(0, 0, 0);</string>
              </rect>
             </property>
             <property name="text">
-             <string>Description</string>
+             <string>Detail</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_4">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>331</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_5">
+            <property name="geometry">
+             <rect>
+              <x>360</x>
+              <y>70</y>
+              <width>341</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
             </property>
            </widget>
           </widget>
-          <widget class="QFrame" name="frame_7">
+          <widget class="QFrame" name="frame_4">
            <property name="geometry">
             <rect>
              <x>20</x>
@@ -515,7 +505,7 @@ color: rgb(0, 0, 0);</string>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <widget class="QLabel" name="label_11">
+           <widget class="QLabel" name="label_10">
             <property name="geometry">
              <rect>
               <x>10</x>
@@ -531,7 +521,7 @@ color: rgb(0, 0, 0);</string>
              <string>Flashcard 3</string>
             </property>
            </widget>
-           <widget class="Line" name="line_8">
+           <widget class="Line" name="line_5">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -544,7 +534,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-           <widget class="Line" name="line_9">
+           <widget class="Line" name="line_6">
             <property name="geometry">
              <rect>
               <x>340</x>
@@ -560,39 +550,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Vertical</enum>
             </property>
            </widget>
-           <widget class="QLineEdit" name="lineEdit_7">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>70</y>
-              <width>331</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="lineEdit_8">
-            <property name="geometry">
-             <rect>
-              <x>360</x>
-              <y>70</y>
-              <width>341</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="label_11">
             <property name="geometry">
              <rect>
               <x>160</x>
@@ -605,7 +563,7 @@ color: rgb(0, 0, 0);</string>
              <string>Item</string>
             </property>
            </widget>
-           <widget class="QLabel" name="label_13">
+           <widget class="QLabel" name="label_12">
             <property name="geometry">
              <rect>
               <x>500</x>
@@ -615,11 +573,40 @@ color: rgb(0, 0, 0);</string>
              </rect>
             </property>
             <property name="text">
-             <string>Description</string>
+             <string>Detail</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_6">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>331</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_7">
+            <property name="geometry">
+             <rect>
+              <x>360</x>
+              <y>70</y>
+              <width>341</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
             </property>
            </widget>
           </widget>
-          <widget class="QFrame" name="frame_8">
+          <widget class="QFrame" name="frame_5">
            <property name="geometry">
             <rect>
              <x>20</x>
@@ -638,7 +625,7 @@ color: rgb(0, 0, 0);</string>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <widget class="QLabel" name="label_14">
+           <widget class="QLabel" name="label_13">
             <property name="geometry">
              <rect>
               <x>10</x>
@@ -654,7 +641,7 @@ color: rgb(0, 0, 0);</string>
              <string>Flashcard 4</string>
             </property>
            </widget>
-           <widget class="Line" name="line_10">
+           <widget class="Line" name="line_7">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -667,7 +654,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-           <widget class="Line" name="line_11">
+           <widget class="Line" name="line_8">
             <property name="geometry">
              <rect>
               <x>340</x>
@@ -683,39 +670,7 @@ color: rgb(0, 0, 0);</string>
              <enum>Qt::Vertical</enum>
             </property>
            </widget>
-           <widget class="QLineEdit" name="lineEdit_9">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>70</y>
-              <width>331</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="lineEdit_10">
-            <property name="geometry">
-             <rect>
-              <x>360</x>
-              <y>70</y>
-              <width>341</width>
-              <height>121</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_15">
+           <widget class="QLabel" name="label_14">
             <property name="geometry">
              <rect>
               <x>160</x>
@@ -728,7 +683,7 @@ color: rgb(0, 0, 0);</string>
              <string>Item</string>
             </property>
            </widget>
-           <widget class="QLabel" name="label_16">
+           <widget class="QLabel" name="label_15">
             <property name="geometry">
              <rect>
               <x>500</x>
@@ -738,7 +693,36 @@ color: rgb(0, 0, 0);</string>
              </rect>
             </property>
             <property name="text">
-             <string>Description</string>
+             <string>Detail</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_8">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>331</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
+            </property>
+           </widget>
+           <widget class="QTextEdit" name="textEdit_9">
+            <property name="geometry">
+             <rect>
+              <x>360</x>
+              <y>70</y>
+              <width>341</width>
+              <height>121</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid rgb(0, 0, 0);</string>
             </property>
            </widget>
           </widget>

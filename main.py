@@ -9,7 +9,9 @@ from ui.quizzes_window import Ui_QuizzesWindow
 
 FLASHCARD_FILE = "flashcards.json"
 
-# Main Window
+# ======================
+# MAIN WINDOW
+# ======================
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -17,25 +19,51 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("Quizify")
 
+        # Initialize sub-windows
         self.flashcard_window = None
         self.quizzes_window = None
 
-        # When user clicks one of the PushButtons, open the window for it
+        # ==============================
+        # Top Navigation Buttons
+        # ==============================
+        self.ui.homePage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
+        self.ui.setPage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
+        self.ui.quizzesPage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+
+        self.ui.homePage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
+        self.ui.setPage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
+        self.ui.quizzesPage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+
+        self.ui.homePage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
+        self.ui.setPage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
+        self.ui.quizzesPage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+
+        # ==============================
+        # Homepage Main Buttons -> Open New Windows
+        # ==============================
         self.ui.flashcardSet.clicked.connect(self.open_flashcards)
         self.ui.quizzesBtn.clicked.connect(self.open_quizzes)
 
+    # ==============================
+    # Opens Flashcard Creation Window
+    # ==============================
     def open_flashcards(self):
         if self.flashcard_window is None:
             self.flashcard_window = FlashcardWindow()
         self.flashcard_window.show()
 
+    # ==============================
+    # Opens Quizzes Window
+    # ==============================
     def open_quizzes(self):
         if self.quizzes_window is None:
             self.quizzes_window = QuizzesWindow()
         self.quizzes_window.show()
 
 
-# Flashcards Window
+# ======================
+# FLASHCARDS WINDOW
+# ======================
 class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
     def __init__(self):
         super().__init__()
@@ -57,7 +85,7 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
 
     def create_flashcard_set(self):
         title = self.lineEdit.text().strip()
-        description = self.lineEdit_2.text().strip()
+        description = self.textEdit.toPlainText().strip()
 
         # Validate title & description
         if not title or not description:
@@ -67,17 +95,17 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         # Get flashcards (4 possible)
         flashcards = []
         cards = [
-            (self.lineEdit_3, self.lineEdit_4),
-            (self.lineEdit_5, self.lineEdit_6),
-            (self.lineEdit_7, self.lineEdit_8),
-            (self.lineEdit_9, self.lineEdit_10)
+            (self.textEdit_2, self.textEdit_3),
+            (self.textEdit_4, self.textEdit_5),
+            (self.textEdit_6, self.textEdit_7),
+            (self.textEdit_8, self.textEdit_9)
         ]
 
         for item_edit, desc_edit in cards:
-            item = item_edit.text().strip()
-            desc = desc_edit.text().strip()
+            item = item_edit.toPlainText().strip()
+            desc = desc_edit.toPlainText().strip()
             if item and desc:
-                flashcards.append({"item": item, "description": desc})
+                flashcards.append({"item": item, "detail": desc})
 
         # Must have at least 2 flashcards
         if len(flashcards) < 2:
@@ -99,17 +127,18 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         self.label_3.setStyleSheet("color: rgb(170, 0, 0); font-weight: bold;")
 
     def reset_inputs(self):
-        """Clear all LineEdit contents"""
+        """Clear all inputs (QLineEdit + QTextEdit)"""
         fields = [
-            self.lineEdit, self.lineEdit_2,
-            self.lineEdit_3, self.lineEdit_4,
-            self.lineEdit_5, self.lineEdit_6,
-            self.lineEdit_7, self.lineEdit_8,
-            self.lineEdit_9, self.lineEdit_10
+            self.lineEdit,        # Title
+            self.textEdit,        # Description
+            self.textEdit_2, self.textEdit_3,
+            self.textEdit_4, self.textEdit_5,
+            self.textEdit_6, self.textEdit_7,
+            self.textEdit_8, self.textEdit_9
         ]
         for field in fields:
             field.clear()
-        self.set_error("(You must create 2 Flashcards to make a set.)")
+        self.set_error("(Sucessfully resetted.)")
 
     def save_flashcard_set(self, title, description, flashcards):
         """Save flashcard set to flashcards.json"""
@@ -126,7 +155,9 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
             json.dump(data, f, indent=4)
         
 
-# Quizzes Window
+# ======================
+# QUIZZES WINDOW
+# ======================
 class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
     def __init__(self):
         super().__init__()
@@ -134,6 +165,9 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         self.setWindowTitle("Quizify - Quiz")
 
 
+# ======================
+# MAIN ENTRY POINT
+# ======================
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
