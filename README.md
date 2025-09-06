@@ -20,7 +20,7 @@ pyside6-uic ui/quizzes_window.ui -o ui/quizzes_window.py
 ## 4. Setting Up Flashcards Storage
 Before running the app, create your own `flashcards.json` file.
 
-You can do this manually or copy the example file:
+You can do this manually or copy the example file:  
 ***bash***
 ```bash
 cp flashcards.example.json flashcards.json
