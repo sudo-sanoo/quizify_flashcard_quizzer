@@ -4,7 +4,7 @@ python -m venv venv
 
 ## 2. Activate the virtual environment and install dependencies
 For Windows:  
-==Poweshell/Command Prompt==
+***Powershell/Command Prompt***
 ```powershell
 venv\Scripts\activate.bat  
 pip install -r requirements.txt
@@ -21,11 +21,11 @@ pyside6-uic ui/quizzes_window.ui -o ui/quizzes_window.py
 Before running the app, create your own `flashcards.json` file.
 
 You can do this manually or copy the example file:
-==bash==
+***bash***
 ```bash
 cp flashcards.example.json flashcards.json
 ```
-==powershell==
+***powershell***
 ```powershell
 copy flashcards.example.json flashcards.json
 ```
