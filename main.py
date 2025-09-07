@@ -1,13 +1,17 @@
 import json
 import os
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QMessageBox, QPushButton,
+    QWidget, QTableWidgetItem
+)
 from PySide6.QtCore import Qt
 from ui.main_window import Ui_MainWindow
 from ui.flashcard_window import Ui_FlashcardWindow
 from ui.quizzes_window import Ui_QuizzesWindow
 
 FLASHCARD_FILE = "flashcards.json"
+QUIZZES_FILE = "quizzes.json"
 
 # ======================
 # MAIN WINDOW
@@ -17,40 +21,152 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.setFixedSize(self.size())
         self.setWindowTitle("Quizify")
 
         # Initialize sub-windows
         self.flashcard_window = None
         self.quizzes_window = None
 
+        # Ensure flashcards.json exists
+        if not os.path.exists(FLASHCARD_FILE):
+            with open(FLASHCARD_FILE, "w") as f:
+                json.dump([], f)
+
         # ==============================
         # Top Navigation Buttons
         # ==============================
         self.ui.homePage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
-        self.ui.setPage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
-        self.ui.quizzesPage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+        self.ui.setPage.clicked.connect(self.show_flashcard_sets)
+        self.ui.quizzesPage.clicked.connect(self.show_quizzes)
 
         self.ui.homePage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
-        self.ui.setPage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
-        self.ui.quizzesPage_2.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+        self.ui.setPage_2.clicked.connect(self.show_flashcard_sets)
+        self.ui.quizzesPage_2.clicked.connect(self.show_quizzes)
 
         self.ui.homePage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
-        self.ui.setPage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
-        self.ui.quizzesPage_3.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+        self.ui.setPage_3.clicked.connect(self.show_flashcard_sets)
+        self.ui.quizzesPage_3.clicked.connect(self.show_quizzes)
 
         # ==============================
-        # Homepage Main Buttons -> Open New Windows
+        # Homepage Buttons -> Open New Windows
         # ==============================
         self.ui.flashcardSet.clicked.connect(self.open_flashcards)
         self.ui.quizzesBtn.clicked.connect(self.open_quizzes)
+
+        # ==============================
+        # Style Tables
+        # ==============================
+        table_style = """
+            QTableWidget {
+                border: 1px solid #000000;
+                gridline-color: #000000;
+                color: #000;
+            }
+            QHeaderView::section {
+                background-color: #c0c0c0;
+                border: 1px solid #000000;
+                color: #000;
+            }
+        """
+        self.ui.tableWidget.setStyleSheet(table_style)
+        self.ui.tableWidget_2.setStyleSheet(table_style)
 
     # ==============================
     # Opens Flashcard Creation Window
     # ==============================
     def open_flashcards(self):
         if self.flashcard_window is None:
-            self.flashcard_window = FlashcardWindow()
+            self.flashcard_window = FlashcardWindow(self)
         self.flashcard_window.show()
+
+    # ==============================
+    # Show Flashcard Sets Page
+    # ==============================
+    def show_flashcard_sets(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+        self.load_flashcard_sets()
+
+    # ==============================
+    # Load Flashcards into QTableWidget
+    # ==============================
+    def load_flashcard_sets(self):
+        if not os.path.exists(FLASHCARD_FILE):
+            return
+
+        with open(FLASHCARD_FILE, "r") as f:
+            flashcards = json.load(f)
+
+        table = self.ui.tableWidget
+        table.setRowCount(len(flashcards))
+
+        for row, flashcard_set in enumerate(flashcards):
+            # Title
+            title_item = QTableWidgetItem(flashcard_set["title"])
+            title_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+            table.setItem(row, 0, title_item)
+
+            # Description
+            desc_item = QTableWidgetItem(flashcard_set["description"])
+            desc_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+            table.setItem(row, 1, desc_item)
+
+            # View button
+            view_btn = QPushButton("View")
+            view_btn.setStyleSheet("background-color: rgb(0,0,255); color: #000;")
+            view_btn.clicked.connect(lambda _, r=row: self.view_flashcard_set(r))
+            table.setCellWidget(row, 2, view_btn)
+
+            # Delete button
+            del_btn = QPushButton("Delete")
+            del_btn.setStyleSheet("background-color: rgb(255,0,0); color: #000;")
+            del_btn.clicked.connect(lambda _, r=row: self.delete_flashcard_set(r))
+            table.setCellWidget(row, 3, del_btn)
+
+        table.resizeRowsToContents()
+        table.resizeColumnsToContents()
+
+    # ==============================
+    # View Flashcard Set
+    # ==============================
+    def view_flashcard_set(self, index):
+        with open(FLASHCARD_FILE, "r") as f:
+            data = json.load(f)
+        if index >= len(data):
+            return
+        
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Flashcards")
+        msg.setText(f"Viewing: {data[index]['title']}")
+        msg.setStyleSheet(self.msg_box_style())
+        msg.exec()
+
+    # ==============================
+    # Delete Flashcard Set
+    # ==============================
+    def delete_flashcard_set(self, index):
+        if not os.path.exists(FLASHCARD_FILE):
+            return
+
+        with open(FLASHCARD_FILE, "r") as f:
+            data = json.load(f)
+
+        if index >= len(data):
+            return
+
+        title = data[index]["title"]
+        confirm = QMessageBox(self)
+        confirm.setWindowTitle("Delete Flashcard Set")
+        confirm.setText(f"Are you sure you want to delete '{title}'?")
+        confirm.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirm.setStyleSheet(self.msg_box_style())
+        result = confirm.exec()
+
+        if result == QMessageBox.Yes:
+            data.pop(index)
+            with open(FLASHCARD_FILE, "w") as f:
+                json.dump(data, f, indent=4)
+            self.load_flashcard_sets()
 
     # ==============================
     # Opens Quizzes Window
@@ -60,15 +176,126 @@ class MainWindow(QMainWindow):
             self.quizzes_window = QuizzesWindow()
         self.quizzes_window.show()
 
+    # ==============================
+    # Show Quizzes Page
+    # ==============================
+    def show_quizzes(self):
+        self.ui.stackedWidget.setCurrentIndex(2)
+        self.load_quizzes()
+
+    # ==============================
+    # Load Quizzes into QTableWidget
+    # ==============================
+    def load_quizzes(self):
+        if not os.path.exists(QUIZZES_FILE):
+            return
+
+        with open(QUIZZES_FILE, "r") as f:
+            quizzes = json.load(f)
+
+        table = self.ui.tableWidget_2
+        table.setRowCount(len(quizzes))
+
+        for row, quiz in enumerate(quizzes):
+            # Title
+            title_item = QTableWidgetItem(quiz["title"])
+            title_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+            table.setItem(row, 0, title_item)
+
+            # View button
+            view_btn = QPushButton("View")
+            view_btn.setStyleSheet("background-color: rgb(0,0,255); color: #fff;")
+            view_btn.clicked.connect(lambda _, r=row: self.view_quiz(r))
+            table.setCellWidget(row, 1, view_btn)
+
+            # Delete button
+            del_btn = QPushButton("Delete")
+            del_btn.setStyleSheet("background-color: rgb(255,0,0); color: #fff;")
+            del_btn.clicked.connect(lambda _, r=row: self.delete_quiz(r))
+            table.setCellWidget(row, 2, del_btn)
+
+        table.resizeRowsToContents()
+        table.resizeColumnsToContents()
+
+    # ==============================
+    # View Quiz
+    # ==============================
+    def view_quiz(self, index):
+        with open(QUIZZES_FILE, "r") as f:
+            data = json.load(f)
+        if index >= len(data):
+            return
+
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Quiz")
+        msg.setText(f"Viewing: {data[index]['title']}")
+        msg.setStyleSheet(self.msg_box_style())
+        msg.exec()
+
+
+    # ==============================
+    # Delete Quiz
+    # ==============================
+    def delete_quiz(self, index):
+        if not os.path.exists(QUIZZES_FILE):
+            return
+
+        with open(QUIZZES_FILE, "r") as f:
+            data = json.load(f)
+
+        if index >= len(data):
+            return
+
+        title = data[index]["title"]
+        confirm = QMessageBox(self)
+        confirm.setWindowTitle("Delete Quiz")
+        confirm.setText(f"Are you sure you want to delete '{title}'?")
+        confirm.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirm.setStyleSheet(self.msg_box_style())
+        result = confirm.exec()
+
+        if result == QMessageBox.Yes:
+            data.pop(index)
+            with open(QUIZZES_FILE, "w") as f:
+                json.dump(data, f, indent=4)
+            self.load_quizzes()
+
+    # ==============================
+    # Common MessageBox Styling
+    # ==============================
+    def msg_box_style(self):
+        return """
+            QMessageBox {
+                background-color: #000000;
+                color: #ffffff;
+            }
+            QLabel {
+                color: #ffffff;
+                background-color: #000000;
+            }
+            QPushButton {
+                background-color: #333333;
+                color: #ffffff;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #555555;
+            }
+        """
+
 
 # ======================
 # FLASHCARDS WINDOW
 # ======================
 class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
-    def __init__(self):
+    def __init__(self, parent_window=None):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(self.size())
         self.setWindowTitle("Quizify - Flashcard")
+        self.parent_window = parent_window
 
         # Buttons
         self.pushButton.clicked.connect(self.create_flashcard_set)   # "Create Flashcard Set"
@@ -83,11 +310,14 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
             with open(FLASHCARD_FILE, "w") as f:
                 json.dump([], f)
 
+    # ==============================
+    # Create Flashcard Set
+    # ==============================
     def create_flashcard_set(self):
         title = self.lineEdit.text().strip()
         description = self.textEdit.toPlainText().strip()
 
-        # Validate title & description
+        # Validate
         if not title or not description:
             self.set_error("Title and Description are required!")
             return
@@ -100,37 +330,34 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
             (self.textEdit_6, self.textEdit_7),
             (self.textEdit_8, self.textEdit_9)
         ]
-
         for item_edit, desc_edit in cards:
             item = item_edit.toPlainText().strip()
             desc = desc_edit.toPlainText().strip()
             if item and desc:
                 flashcards.append({"item": item, "detail": desc})
 
-        # Must have at least 2 flashcards
         if len(flashcards) < 2:
             self.set_error("You must create at least 2 flashcards!")
             return
 
-        # Save the flashcard set
+        # Save
         self.save_flashcard_set(title, description, flashcards)
 
-        # Success message
-        QMessageBox.information(self, "Success", "Flashcard set created successfully!")
+        # Refresh main window list
+        if self.parent_window:
+            self.parent_window.load_flashcard_sets()
 
-        # Reset after success
+        # Success
+        QMessageBox.information(self, "Success", "Flashcard set created successfully!")
         self.reset_inputs()
 
     def set_error(self, message):
-        """Show error messages on label_3"""
         self.label_3.setText(message)
         self.label_3.setStyleSheet("color: rgb(170, 0, 0); font-weight: bold;")
 
     def reset_inputs(self):
-        """Clear all inputs (QLineEdit + QTextEdit)"""
         fields = [
-            self.lineEdit,        # Title
-            self.textEdit,        # Description
+            self.lineEdit, self.textEdit,
             self.textEdit_2, self.textEdit_3,
             self.textEdit_4, self.textEdit_5,
             self.textEdit_6, self.textEdit_7,
@@ -138,22 +365,19 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         ]
         for field in fields:
             field.clear()
-        self.set_error("(Sucessfully resetted.)")
+        self.set_error("(Successfully resetted.)")
 
     def save_flashcard_set(self, title, description, flashcards):
-        """Save flashcard set to flashcards.json"""
         with open(FLASHCARD_FILE, "r") as f:
             data = json.load(f)
-
         data.append({
             "title": title,
             "description": description,
             "flashcards": flashcards
         })
-
         with open(FLASHCARD_FILE, "w") as f:
             json.dump(data, f, indent=4)
-        
+
 
 # ======================
 # QUIZZES WINDOW
@@ -161,6 +385,7 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
 class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
     def __init__(self):
         super().__init__()
+        self.setFixedSize(self.size())
         self.setupUi(self)
         self.setWindowTitle("Quizify - Quiz")
 

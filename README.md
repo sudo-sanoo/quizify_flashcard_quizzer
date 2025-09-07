@@ -3,8 +3,7 @@
 python -m venv venv
 
 ## 2. Activate the virtual environment and install dependencies
-For Windows:  
-***Powershell/Command Prompt***
+***For Windows: Powershell/Command Prompt***
 ```powershell
 venv\Scripts\activate.bat  
 pip install -r requirements.txt
@@ -24,11 +23,15 @@ You can do this manually or copy the example file:
 ***bash***
 ```bash
 cp flashcards.example.json flashcards.json
+cp quizzes.example.json quizzes.json
 ```
 ***powershell***
 ```powershell
 copy flashcards.example.json flashcards.json
+copy quizzes.example.json quizzes.json
 ```
 
 ## 5. Launch the Application
+```
 python main.py
+```

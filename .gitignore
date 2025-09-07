@@ -6,6 +6,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 flashcards.json
+quizzes.json
 
 # Generated UI Python files
 ui/*.py
