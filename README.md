@@ -1,6 +1,12 @@
 # Quizify - Setup Guide
+## Python Interpreter
+For the best performance, install **Python 3.11.9**. You can download it from the official Python website:  
+[Download Python 3.11.9](https://www.python.org/downloads/release/python-3119/)
+
 ## 1. Create a Python virtual environment
-python -m venv venv
+```terminal
+python3.11 -m venv venv
+```
 
 ## 2. Activate the virtual environment and install dependencies
 ***For Windows: Powershell/Command Prompt***

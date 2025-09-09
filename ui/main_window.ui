@@ -24,7 +24,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="homepage">
        <widget class="QLabel" name="quizifyLabel">
@@ -249,7 +249,7 @@ color: #000;</string>
          <bool>false</bool>
         </attribute>
         <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>192</number>
+         <number>180</number>
         </attribute>
         <attribute name="horizontalHeaderDefaultSectionSize">
          <number>192</number>
