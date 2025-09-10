@@ -3,13 +3,14 @@ import os
 import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QMessageBox, QPushButton,
-    QWidget, QTableWidgetItem
+    QWidget, QTableWidgetItem, QButtonGroup
 )
 from PySide6.QtCore import Qt
 from ui.main_window import Ui_MainWindow
 from ui.flashcard_window import Ui_FlashcardWindow
 from ui.flashcard_set_view import Ui_MainWindow as Ui_FlashcardSetView
 from ui.quizzes_window import Ui_QuizzesWindow
+from ui.quizzes_set_view import Ui_MainWindow as Ui_QuizzesSetView
 
 FLASHCARD_FILE = "flashcards.json"
 QUIZZES_FILE = "quizzes.json"
@@ -214,16 +215,9 @@ class MainWindow(QMainWindow):
     # View Quiz
     # ==============================
     def view_quiz(self, index):
-        with open(QUIZZES_FILE, "r") as f:
-            data = json.load(f)
-        if index >= len(data):
-            return
-
-        msg = QMessageBox(self)
-        msg.setWindowTitle("Quiz")
-        msg.setText(f"Viewing: {data[index]['title']}")
-        msg.setStyleSheet(self.msg_box_style())
-        msg.exec()
+        # Open the quizzes set view
+        self.quiz_window = QuizzesSetViewWindow(index)
+        self.quiz_window.show()
 
 
     # ==============================
@@ -549,6 +543,88 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         self.comboBox.setCurrentIndex(0)
         self.spinBox.setValue(1)
         self.error_message.setText("")
+
+
+# ==============================
+# QUIZZES SET VIEW WINDOW
+# ==============================
+class QuizzesSetViewWindow(QMainWindow):
+    def __init__(self, quiz_index, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_MainWindow()
+        self.ui = Ui_QuizzesSetView()
+        self.ui.setupUi(self)
+        
+        # Example: list of questions (replace with your actual quiz data)
+        self.questions = [
+            {"question": "Question 1?", "options": ["A", "B", "C"], "correct": 0},
+            {"question": "Question 2?", "options": ["X", "Y", "Z"], "correct": 1},
+            {"question": "Question 3?", "options": ["M", "N", "O"], "correct": 2},
+        ]
+        
+        self.answers = [None] * len(self.questions)
+        self.current_index = 0
+        
+        self.option_group = QButtonGroup(self)
+        self.option_group.setExclusive(True)
+        self.option_group.addButton(self.ui.checkBox, 0)
+        self.option_group.addButton(self.ui.checkBox_2, 1)
+        self.option_group.addButton(self.ui.checkBox_3, 2)
+
+        self.ui.nextBtn.clicked.connect(self.next_question)
+        self.ui.prevBtn.clicked.connect(self.prev_question)
+        self.ui.prevBtn_2.clicked.connect(self.prev_question)
+        
+        self.update_page()
+
+    def update_page(self):
+        total_pages = len(self.questions)
+        if self.current_index < total_pages:
+            # Update question page
+            q = self.questions[self.current_index]
+            self.ui.question.setText(q["question"])
+            self.ui.checkBox.setText(q["options"][0])
+            self.ui.checkBox_2.setText(q["options"][1])
+            self.ui.checkBox_3.setText(q["options"][2])
+            
+            self.option_group.setExclusive(False)
+            self.ui.checkBox.setChecked(False)
+            self.ui.checkBox_2.setChecked(False)
+            self.ui.checkBox_3.setChecked(False)
+            self.option_group.setExclusive(True)
+            
+            # Hide result page
+            self.ui.stackedWidget.setCurrentIndex(0)
+            
+            # Update progress bar
+            progress = int((self.current_index / total_pages) * 100)
+            self.ui.progressBar.setValue(progress)
+        else:
+            # Show results page
+            score = sum(1 for i, a in enumerate(self.answers) if a == self.questions[i]["correct"])
+            self.ui.result_text.setText(f"You scored {score} out of {len(self.questions)}")
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.ui.progressBar.setValue(100)
+
+    def next_question(self):
+        # Record selected answer
+        if self.current_index < len(self.questions):
+            if self.ui.checkBox.isChecked():
+                self.answers[self.current_index] = 0
+            elif self.ui.checkBox_2.isChecked():
+                self.answers[self.current_index] = 1
+            elif self.ui.checkBox_3.isChecked():
+                self.answers[self.current_index] = 2
+            else:
+                self.answers[self.current_index] = None
+
+        self.current_index += 1
+        self.update_page()
+
+    def prev_question(self):
+        if self.current_index > 0:
+            self.current_index -= 1
+        self.update_page()
 
 
 # ======================
