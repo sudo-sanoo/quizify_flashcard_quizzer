@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from ui.main_window import Ui_MainWindow
 from ui.flashcard_window import Ui_FlashcardWindow
+from ui.flashcard_set_view import Ui_MainWindow as Ui_FlashcardSetView
 from ui.quizzes_window import Ui_QuizzesWindow
 
 FLASHCARD_FILE = "flashcards.json"
@@ -130,16 +131,8 @@ class MainWindow(QMainWindow):
     # View Flashcard Set
     # ==============================
     def view_flashcard_set(self, index):
-        with open(FLASHCARD_FILE, "r") as f:
-            data = json.load(f)
-        if index >= len(data):
-            return
-        
-        msg = QMessageBox(self)
-        msg.setWindowTitle("Flashcards")
-        msg.setText(f"Viewing: {data[index]['title']}")
-        msg.setStyleSheet(self.msg_box_style())
-        msg.exec()
+        self.viewer_window = FlashcardSetViewWindow(index)
+        self.viewer_window.show()
 
     # ==============================
     # Delete Flashcard Set
@@ -377,6 +370,70 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         })
         with open(FLASHCARD_FILE, "w") as f:
             json.dump(data, f, indent=4)
+
+# =============================
+#  VIEW FLASHCARD SET WINDOW
+# =============================
+
+class FlashcardSetViewWindow(QMainWindow, Ui_FlashcardSetView):
+    def __init__(self, set_index):
+        super().__init__()
+        self.setupUi(self)
+        self.setFixedSize(self.size())
+        self.set_index = set_index
+
+        # Load flashcards
+        with open(FLASHCARD_FILE, "r") as f:
+            data = json.load(f)
+
+        if set_index >= len(data):
+            self.close()
+            return
+
+        self.flashcard_set = data[set_index]
+        self.flashcards = self.flashcard_set["flashcards"]
+        self.setWindowTitle(f"{self.flashcard_set['title']}")
+
+        # Track current page
+        self.current_page = 0
+        self.total_pages = len(self.flashcards) * 2  # 2 pages per flashcard
+
+        # Initialize UI
+        self.update_page()
+
+        # Connect buttons
+        self.continueBtn.clicked.connect(self.next_page)
+        self.continueBtn_2.clicked.connect(self.next_page)
+        self.returnBtn.clicked.connect(self.prev_page)
+        self.returnBtn_2.clicked.connect(self.prev_page)
+
+    def update_page(self):
+        """Update UI for current page."""
+        flashcard_index = self.current_page // 2
+        is_item_page = self.current_page % 2 == 0
+
+        if flashcard_index >= len(self.flashcards):
+            return
+
+        if is_item_page:
+            self.item_text.setText(self.flashcards[flashcard_index]["item"])
+            self.stackedWidget.setCurrentWidget(self.title_page)
+        else:
+            self.detail_text.setText(self.flashcards[flashcard_index]["detail"])
+            self.stackedWidget.setCurrentWidget(self.detail_page)
+
+    def next_page(self):
+        """Go to next page if available."""
+        if self.current_page < self.total_pages - 1:
+            self.current_page += 1
+            self.update_page()
+
+    def prev_page(self):
+        """Go to previous page if available."""
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.update_page()
+
 
 
 # ======================
