@@ -440,11 +440,115 @@ class FlashcardSetViewWindow(QMainWindow, Ui_FlashcardSetView):
 # QUIZZES WINDOW
 # ======================
 class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
-    def __init__(self):
+    def __init__(self, parent=None):
         super().__init__()
-        self.setFixedSize(self.size())
         self.setupUi(self)
-        self.setWindowTitle("Quizify - Quiz")
+        self.setFixedSize(self.size())
+        self.setWindowTitle("Quizify - Create Quiz")
+        self.parent_window = parent
+
+        if not os.path.exists(QUIZZES_FILE):
+            with open(QUIZZES_FILE, "w") as f:
+                json.dump([], f)
+
+        self.load_flashcard_titles()
+
+        self.error_message.setText("")
+
+        self.pushButton.clicked.connect(self.create_quiz)
+
+    # Load Flashcard Titles into Dropdown
+    def load_flashcard_titles(self):
+        self.flashcard_titles.clear()
+        if not os.path.exists(FLASHCARD_FILE):
+            return
+
+        with open(FLASHCARD_FILE, "r") as f:
+            flashcards = json.load(f)
+
+        if not flashcards:
+            self.flashcard_titles.addItem("No flashcard sets available")
+            self.flashcard_titles.setEnabled(False)
+            return
+
+        self.flashcard_titles.setEnabled(True)
+        for flashcard_set in flashcards:
+            self.flashcard_titles.addItem(flashcard_set["title"])
+
+
+    # Create Quiz
+    def create_quiz(self):
+        title = self.lineEdit.text().strip()
+        flashcard_title = self.flashcard_titles.currentText()
+        quiz_type = self.comboBox.currentText()
+        num_questions = self.spinBox.value()
+
+        # Validate title
+        if not title:
+            return self.show_error("Quiz title is required!")
+
+        # Validate flashcard set
+        if not os.path.exists(FLASHCARD_FILE):
+            return self.show_error("No flashcard sets available!")
+
+        with open(FLASHCARD_FILE, "r") as f:
+            flashcards_data = json.load(f)
+
+        if not flashcards_data:
+            return self.show_error("Please create at least one flashcard set first!")
+
+        # Find the selected flashcard set
+        selected_set = next(
+            (fs for fs in flashcards_data if fs["title"] == flashcard_title), None
+        )
+
+        if not selected_set:
+            return self.show_error("Invalid flashcard set selected!")
+
+        # Validate question count
+        if num_questions > len(selected_set["flashcards"]):
+            return self.show_error(
+                f"Not enough flashcards! This set only has {len(selected_set['flashcards'])} flashcards."
+            )
+
+        quiz = {
+            "title": title,
+            "flashcard_title": flashcard_title,
+            "quiz_type": quiz_type,
+            "num_questions": num_questions,
+        }
+
+        # Save to quizzes.json
+        with open(QUIZZES_FILE, "r") as f:
+            quizzes = json.load(f)
+
+        quizzes.append(quiz)
+
+        with open(QUIZZES_FILE, "w") as f:
+            json.dump(quizzes, f, indent=4)
+
+        # Success message
+        QMessageBox.information(self, "Success", "Quiz created successfully!")
+
+        # Reset inputs
+        self.reset_inputs()
+
+        # Refresh quizzes table in main window
+        if self.parent_window:
+            self.parent_window.load_quizzes()
+
+    # Show Error Message
+    def show_error(self, message):
+        self.error_message.setText(message)
+        self.error_message.setStyleSheet("color: rgb(170, 0, 0); font-weight: bold;")
+
+    # Reset Inputs
+    def reset_inputs(self):
+        self.lineEdit.clear()
+        self.flashcard_titles.setCurrentIndex(0)
+        self.comboBox.setCurrentIndex(0)
+        self.spinBox.setValue(1)
+        self.error_message.setText("")
 
 
 # ======================
