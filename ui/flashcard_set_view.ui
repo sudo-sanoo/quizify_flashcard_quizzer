@@ -27,7 +27,7 @@
           <string notr="true">background-color: rgb(242, 238, 230);</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="title_page">
           <widget class="QPushButton" name="returnBtn">
@@ -81,8 +81,10 @@ font-size: 20px;
             </rect>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size: 15px;
-color: #000;</string>
+            <string notr="true">font-size: 20px;
+color: #000;
+font-weight: 700;
+</string>
            </property>
            <property name="text">
             <string/>
