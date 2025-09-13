@@ -27,18 +27,14 @@ class MainWindow(QMainWindow):
         self.setFixedSize(self.size())
         self.setWindowTitle("Quizify")
 
-        # Initialize sub-windows
         self.flashcard_window = None
         self.quizzes_window = None
 
-        # Ensure flashcards.json exists
         if not os.path.exists(FLASHCARD_FILE):
             with open(FLASHCARD_FILE, "w") as f:
                 json.dump([], f)
 
-        # ==============================
         # Top Navigation Buttons
-        # ==============================
         self.ui.homePage.clicked.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
         self.ui.setPage.clicked.connect(self.show_flashcard_sets)
         self.ui.quizzesPage.clicked.connect(self.show_quizzes)
@@ -51,15 +47,11 @@ class MainWindow(QMainWindow):
         self.ui.setPage_3.clicked.connect(self.show_flashcard_sets)
         self.ui.quizzesPage_3.clicked.connect(self.show_quizzes)
 
-        # ==============================
         # Homepage Buttons -> Open New Windows
-        # ==============================
         self.ui.flashcardSet.clicked.connect(self.open_flashcards)
         self.ui.quizzesBtn.clicked.connect(self.open_quizzes)
 
-        # ==============================
         # Style Tables
-        # ==============================
         table_style = """
             QTableWidget {
                 border: 1px solid #000000;
@@ -75,24 +67,18 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.setStyleSheet(table_style)
         self.ui.tableWidget_2.setStyleSheet(table_style)
 
-    # ==============================
     # Opens Flashcard Creation Window
-    # ==============================
     def open_flashcards(self):
         if self.flashcard_window is None:
             self.flashcard_window = FlashcardWindow(self)
         self.flashcard_window.show()
 
-    # ==============================
     # Show Flashcard Sets Page
-    # ==============================
     def show_flashcard_sets(self):
         self.ui.stackedWidget.setCurrentIndex(1)
         self.load_flashcard_sets()
 
-    # ==============================
     # Load Flashcards into QTableWidget
-    # ==============================
     def load_flashcard_sets(self):
         if not os.path.exists(FLASHCARD_FILE):
             return
@@ -104,23 +90,19 @@ class MainWindow(QMainWindow):
         table.setRowCount(len(flashcards))
 
         for row, flashcard_set in enumerate(flashcards):
-            # Title
             title_item = QTableWidgetItem(flashcard_set["title"])
             title_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             table.setItem(row, 0, title_item)
 
-            # Description
             desc_item = QTableWidgetItem(flashcard_set["description"])
             desc_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             table.setItem(row, 1, desc_item)
 
-            # View button
             view_btn = QPushButton("View")
             view_btn.setStyleSheet("background-color: rgb(0,0,255); color: #000;")
             view_btn.clicked.connect(lambda _, r=row: self.view_flashcard_set(r))
             table.setCellWidget(row, 2, view_btn)
 
-            # Delete button
             del_btn = QPushButton("Delete")
             del_btn.setStyleSheet("background-color: rgb(255,0,0); color: #000;")
             del_btn.clicked.connect(lambda _, r=row: self.delete_flashcard_set(r))
@@ -129,16 +111,12 @@ class MainWindow(QMainWindow):
         table.resizeRowsToContents()
         table.resizeColumnsToContents()
 
-    # ==============================
     # View Flashcard Set
-    # ==============================
     def view_flashcard_set(self, index):
         self.viewer_window = FlashcardSetViewWindow(index)
         self.viewer_window.show()
 
-    # ==============================
     # Delete Flashcard Set
-    # ==============================
     def delete_flashcard_set(self, index):
         if not os.path.exists(FLASHCARD_FILE):
             return
@@ -163,24 +141,18 @@ class MainWindow(QMainWindow):
                 json.dump(data, f, indent=4)
             self.load_flashcard_sets()
 
-    # ==============================
     # Opens Quizzes Window
-    # ==============================
     def open_quizzes(self):
         if self.quizzes_window is None:
             self.quizzes_window = QuizzesWindow()
         self.quizzes_window.show()
 
-    # ==============================
     # Show Quizzes Page
-    # ==============================
     def show_quizzes(self):
         self.ui.stackedWidget.setCurrentIndex(2)
         self.load_quizzes()
 
-    # ==============================
     # Load Quizzes into QTableWidget
-    # ==============================
     def load_quizzes(self):
         if not os.path.exists(QUIZZES_FILE):
             return
@@ -212,9 +184,7 @@ class MainWindow(QMainWindow):
         table.resizeRowsToContents()
         table.resizeColumnsToContents()
 
-    # ==============================
     # View Quiz
-    # ==============================
     def view_quiz(self, index):
         with open(QUIZZES_FILE, "r") as f:
             quizzes = json.load(f)
@@ -231,9 +201,7 @@ class MainWindow(QMainWindow):
         self.quiz_window.show()
 
 
-    # ==============================
     # Delete Quiz
-    # ==============================
     def delete_quiz(self, index):
         if not os.path.exists(QUIZZES_FILE):
             return
@@ -258,9 +226,7 @@ class MainWindow(QMainWindow):
                 json.dump(data, f, indent=4)
             self.load_quizzes()
 
-    # ==============================
     # Common MessageBox Styling
-    # ==============================
     def msg_box_style(self):
         return """
             QMessageBox {
@@ -295,15 +261,12 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         self.setWindowTitle("Quizify - Flashcard")
         self.parent_window = parent_window
 
-        # Buttons
         self.pushButton.clicked.connect(self.create_flashcard_set)
         self.pushButton_2.clicked.connect(self.reset_inputs)
 
-        # Error label (label_3)
         self.label_3.setText("")
         self.label_3.setStyleSheet("color: rgb(170, 0, 0);")
 
-        # JSON file initialization
         if not os.path.exists(FLASHCARD_FILE):
             with open(FLASHCARD_FILE, "w") as f:
                 json.dump([], f)
@@ -346,11 +309,9 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         # Save
         self.save_flashcard_set(title, description, flashcards)
 
-        # Refresh main window list
         if self.parent_window:
             self.parent_window.load_flashcard_sets()
 
-        # Success
         QMessageBox.information(self, "Success", "Flashcard set created successfully!")
         self.clear_inputs()
         self.set_success("Successfully created.")
@@ -420,14 +381,11 @@ class FlashcardSetViewWindow(QMainWindow, Ui_FlashcardSetView):
         self.flashcards = self.flashcard_set["flashcards"]
         self.setWindowTitle(f"{self.flashcard_set['title']}")
 
-        # Track current page
         self.current_page = 0
-        self.total_pages = len(self.flashcards) * 2  # 2 pages per flashcard
+        self.total_pages = len(self.flashcards) * 2 
 
-        # Initialize UI
         self.update_page()
 
-        # Connect buttons
         self.continueBtn.clicked.connect(self.next_page)
         self.continueBtn_2.clicked.connect(self.next_page)
         self.returnBtn.clicked.connect(self.prev_page)
@@ -553,13 +511,15 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         with open(QUIZZES_FILE, "w") as f:
             json.dump(quizzes, f, indent=4)
 
-        # Success message
-        QMessageBox.information(self, "Success", "Quiz created successfully!")
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Success")
+        msg.setText("Quiz created successfully!")
+        msg.setStyleSheet(self.msg_box_style())
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec()
 
-        # Reset inputs
         self.reset_inputs()
 
-        # Refresh quizzes table in main window
         if self.parent_window:
             self.parent_window.load_quizzes()
 
@@ -576,6 +536,29 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         self.spinBox.setValue(1)
         self.error_message.setText("")
 
+    # Common MessageBox Styling
+    def msg_box_style(self):
+        return """
+            QMessageBox {
+                background-color: #000000;
+                color: #ffffff;
+            }
+            QLabel {
+                color: #ffffff;
+                background-color: #000000;
+            }
+            QPushButton {
+                background-color: #333333;
+                color: #ffffff;
+                border: none;
+                padding: 5px 15px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #555555;
+            }
+        """
+
 
 # ==============================
 # QUIZZES SET VIEW WINDOW
@@ -586,6 +569,7 @@ class QuizzesSetViewWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui = Ui_QuizzesSetView()
         self.ui.setupUi(self)
+        self.setFixedSize(self.size())
         
         # Example: list of questions (replace with your actual quiz data)
         self.questions = [
@@ -625,12 +609,14 @@ class QuizzesSetViewWindow(QMainWindow):
             self.ui.checkBox_3.setChecked(False)
             self.option_group.setExclusive(True)
             
-            # Hide result page
             self.ui.stackedWidget.setCurrentIndex(0)
             
             # Update progress bar
             progress = int((self.current_index / total_pages) * 100)
             self.ui.progressBar.setValue(progress)
+
+            self.ui.questions_track.setText(f"Question {self.current_index + 1} of {total_pages}")
+            
         else:
             # Show results page
             score = sum(1 for i, a in enumerate(self.answers) if a == self.questions[i]["correct"])
@@ -639,7 +625,6 @@ class QuizzesSetViewWindow(QMainWindow):
             self.ui.progressBar.setValue(100)
 
     def next_question(self):
-        # Record selected answer
         if self.current_index < len(self.questions):
             if self.ui.checkBox.isChecked():
                 self.answers[self.current_index] = 0
@@ -667,6 +652,7 @@ class OpenQuizzesSetViewWindow(QMainWindow):
         super().__init__(parent)
         self.ui = Ui_OpenQuizzesSetView()
         self.ui.setupUi(self)
+        self.setFixedSize(self.size())
 
         # Load quizzes.json
         with open(QUIZZES_FILE, "r") as f:
@@ -678,7 +664,6 @@ class OpenQuizzesSetViewWindow(QMainWindow):
 
         self.quiz = quizzes[quiz_index]
 
-        # Load related flashcard set
         with open(FLASHCARD_FILE, "r") as f:
             flashcards = json.load(f)
 
@@ -697,7 +682,6 @@ class OpenQuizzesSetViewWindow(QMainWindow):
         self.answers = [None] * len(self.questions)
         self.current_index = 0
 
-        # Connect buttons
         self.ui.nextBtn.clicked.connect(self.next_question)
         self.ui.prevBtn.clicked.connect(self.prev_question)
         self.ui.prevBtn_2.clicked.connect(self.prev_question)
@@ -707,28 +691,23 @@ class OpenQuizzesSetViewWindow(QMainWindow):
     def update_page(self):
         total_pages = len(self.questions)
         if self.current_index < total_pages:
-            # Update question text
+
             q = self.questions[self.current_index]
             self.ui.question.setText(q["question"])
 
-            # Restore previous answer if exists
             if self.answers[self.current_index] is not None:
                 self.ui.answer.setText(self.answers[self.current_index])
             else:
                 self.ui.answer.clear()
 
-            # Show quiz page (index 0, not 1!)
             self.ui.stackedWidget.setCurrentIndex(0)
 
-            # Update progress
             progress = int((self.current_index / total_pages) * 100)
             self.ui.progressBar.setValue(progress)
 
-            # Track label
             self.ui.questions_track.setText(f"Question {self.current_index + 1} of {total_pages}")
 
         else:
-            # Calculate score (case-insensitive check)
             score = sum(
                 1
                 for i, a in enumerate(self.answers)
@@ -736,13 +715,11 @@ class OpenQuizzesSetViewWindow(QMainWindow):
             )
             self.ui.result_text.setText(f"You scored {score} out of {len(self.questions)}")
 
-            # Show result page (index 1, not 0!)
             self.ui.stackedWidget.setCurrentIndex(1)
             self.ui.progressBar.setValue(100)
             self.ui.questions_track.setText("Results")
 
     def next_question(self):
-        # Save current answer
         if self.current_index < len(self.questions):
             self.answers[self.current_index] = self.ui.answer.toPlainText().strip()
 
@@ -750,13 +727,11 @@ class OpenQuizzesSetViewWindow(QMainWindow):
         self.update_page()
 
     def prev_question(self):
-        # If currently on result page, go back to last question
         if self.ui.stackedWidget.currentIndex() == 1 and len(self.questions) > 0:
             self.current_index = len(self.questions) - 1
             self.update_page()
             return
 
-        # Otherwise, go to previous question
         if self.current_index > 0:
             self.current_index -= 1
         self.update_page()
