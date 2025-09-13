@@ -347,14 +347,14 @@ border-radius: 5px;</string>
           <widget class="QLabel" name="label_3">
            <property name="geometry">
             <rect>
-             <x>160</x>
+             <x>70</x>
              <y>10</y>
-             <width>361</width>
+             <width>451</width>
              <height>20</height>
             </rect>
            </property>
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::RightToLeft</enum>
            </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(170, 0, 0);</string>

@@ -41,14 +41,14 @@ border-radius: 5px;</string>
       <widget class="QLabel" name="error_message">
        <property name="geometry">
         <rect>
-         <x>270</x>
+         <x>190</x>
          <y>20</y>
-         <width>361</width>
+         <width>441</width>
          <height>20</height>
         </rect>
        </property>
        <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
+        <enum>Qt::RightToLeft</enum>
        </property>
        <property name="styleSheet">
         <string notr="true">color: rgb(170, 0, 0);</string>
@@ -68,6 +68,9 @@ border-radius: 5px;</string>
          <width>711</width>
          <height>431</height>
         </rect>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
        </property>
        <property name="styleSheet">
         <string notr="true">border: 1px solid #000;
@@ -206,18 +209,65 @@ color: #000;</string>
          <rect>
           <x>120</x>
           <y>100</y>
-          <width>61</width>
+          <width>31</width>
           <height>31</height>
          </rect>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="wrapping">
+         <bool>false</bool>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string/>
         </property>
         <property name="minimum">
          <number>2</number>
         </property>
         <property name="maximum">
-         <number>5</number>
+         <number>4</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="stepType">
+         <enum>QAbstractSpinBox::DefaultStepType</enum>
+        </property>
+        <property name="value">
+         <number>2</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>110</y>
+          <width>151</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(66, 182, 34);
+border: none;</string>
+        </property>
+        <property name="text">
+         <string>(Minimum: 2, Maximum: 4)</string>
         </property>
        </widget>
        <zorder>quiz_title</zorder>
@@ -228,6 +278,7 @@ color: #000;</string>
        <zorder>comboBox</zorder>
        <zorder>label_3</zorder>
        <zorder>spinBox</zorder>
+       <zorder>label_4</zorder>
       </widget>
      </widget>
     </item>

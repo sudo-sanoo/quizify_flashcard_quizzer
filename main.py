@@ -285,8 +285,8 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         self.parent_window = parent_window
 
         # Buttons
-        self.pushButton.clicked.connect(self.create_flashcard_set)   # "Create Flashcard Set"
-        self.pushButton_2.clicked.connect(self.reset_inputs)         # "Reset"
+        self.pushButton.clicked.connect(self.create_flashcard_set)
+        self.pushButton_2.clicked.connect(self.reset_inputs)
 
         # Error label (label_3)
         self.label_3.setText("")
@@ -317,11 +317,16 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
             (self.textEdit_6, self.textEdit_7),
             (self.textEdit_8, self.textEdit_9)
         ]
-        for item_edit, desc_edit in cards:
+
+        for idx, (item_edit, desc_edit) in enumerate(cards, start=1):
             item = item_edit.toPlainText().strip()
             desc = desc_edit.toPlainText().strip()
+
             if item and desc:
                 flashcards.append({"item": item, "detail": desc})
+            elif item or desc:
+                self.set_error(f"Flashcard #{idx} is incomplete. Please fill both item and detail or leave both empty.")
+                return
 
         if len(flashcards) < 2:
             self.set_error("You must create at least 2 flashcards!")
@@ -336,7 +341,23 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
 
         # Success
         QMessageBox.information(self, "Success", "Flashcard set created successfully!")
-        self.reset_inputs()
+        self.clear_inputs()
+        self.set_success("Successfully created.")
+
+    def set_success(self, message):
+        self.label_3.setText(message)
+        self.label_3.setStyleSheet("color: rgb(0, 170, 0); font-weight: bold;")
+
+    def clear_inputs(self):
+        fields = [
+            self.lineEdit, self.textEdit,
+            self.textEdit_2, self.textEdit_3,
+            self.textEdit_4, self.textEdit_5,
+            self.textEdit_6, self.textEdit_7,
+            self.textEdit_8, self.textEdit_9
+        ]
+        for field in fields:
+            field.clear()
 
     def set_error(self, message):
         self.label_3.setText(message)
@@ -502,7 +523,7 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         # Validate question count
         if num_questions > len(selected_set["flashcards"]):
             return self.show_error(
-                f"Not enough flashcards! This set only has {len(selected_set['flashcards'])} flashcards."
+                f"Questions cannot exceed the number of flashcards. ({len(selected_set['flashcards'])} flashcards)"
             )
 
         quiz = {
