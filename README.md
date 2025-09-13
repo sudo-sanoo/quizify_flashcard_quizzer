@@ -22,6 +22,7 @@ pyside6-uic ui/flashcard_window.ui -o ui/flashcard_window.py
 pyside6-uic ui/flashcard_set_view.ui -o ui/flashcard_set_view.py  
 pyside6-uic ui/quizzes_window.ui -o ui/quizzes_window.py  
 pyside6-uic ui/quizzes_set_view.ui -o ui/quizzes_set_view.py
+pyside6-uic ui/open_quizzes_set_view.ui -o ui/open_quizzes_set_view.py
 ```
 
 ## 4. Setting Up Flashcards Storage

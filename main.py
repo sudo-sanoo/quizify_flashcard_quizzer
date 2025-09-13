@@ -11,6 +11,7 @@ from ui.flashcard_window import Ui_FlashcardWindow
 from ui.flashcard_set_view import Ui_MainWindow as Ui_FlashcardSetView
 from ui.quizzes_window import Ui_QuizzesWindow
 from ui.quizzes_set_view import Ui_MainWindow as Ui_QuizzesSetView
+from ui.open_quizzes_set_view import Ui_MainWindow as Ui_OpenQuizzesSetView
 
 FLASHCARD_FILE = "flashcards.json"
 QUIZZES_FILE = "quizzes.json"
@@ -215,8 +216,18 @@ class MainWindow(QMainWindow):
     # View Quiz
     # ==============================
     def view_quiz(self, index):
-        # Open the quizzes set view
-        self.quiz_window = QuizzesSetViewWindow(index)
+        with open(QUIZZES_FILE, "r") as f:
+            quizzes = json.load(f)
+
+        quiz = quizzes[index]
+        if quiz["quiz_type"] == "Multiple Choice (3 Choices)":
+            self.quiz_window = QuizzesSetViewWindow(index)
+        elif quiz["quiz_type"] == "Open-Ended":
+            self.quiz_window = OpenQuizzesSetViewWindow(index)
+        else:
+            QMessageBox.warning(self, "Error", "Unsupported quiz type!")
+            return
+
         self.quiz_window.show()
 
 
@@ -555,7 +566,7 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
     # Show Error Message
     def show_error(self, message):
         self.error_message.setText(message)
-        self.error_message.setStyleSheet("color: rgb(170, 0, 0); font-weight: bold;")
+        self.error_message.setStyleSheet("color: rgb(170, 0, 0); border: none; font-weight: bold;")
 
     # Reset Inputs
     def reset_inputs(self):
@@ -643,6 +654,109 @@ class QuizzesSetViewWindow(QMainWindow):
         self.update_page()
 
     def prev_question(self):
+        if self.current_index > 0:
+            self.current_index -= 1
+        self.update_page()
+
+
+# ==============================
+# OPEN-ENDED QUIZZES SET VIEW WINDOW
+# ==============================
+class OpenQuizzesSetViewWindow(QMainWindow):
+    def __init__(self, quiz_index, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_OpenQuizzesSetView()
+        self.ui.setupUi(self)
+
+        # Load quizzes.json
+        with open(QUIZZES_FILE, "r") as f:
+            quizzes = json.load(f)
+
+        if quiz_index >= len(quizzes):
+            self.close()
+            return
+
+        self.quiz = quizzes[quiz_index]
+
+        # Load related flashcard set
+        with open(FLASHCARD_FILE, "r") as f:
+            flashcards = json.load(f)
+
+        selected_set = next((fs for fs in flashcards if fs["title"] == self.quiz["flashcard_title"]), None)
+        if not selected_set:
+            self.close()
+            return
+
+        # Prepare questions (use "item" as question, "detail" as correct answer)
+        flashcards_list = selected_set["flashcards"][: self.quiz["num_questions"]]
+        self.questions = [
+            {"question": f["item"], "answer": f["detail"]}
+            for f in flashcards_list
+        ]
+
+        self.answers = [None] * len(self.questions)
+        self.current_index = 0
+
+        # Connect buttons
+        self.ui.nextBtn.clicked.connect(self.next_question)
+        self.ui.prevBtn.clicked.connect(self.prev_question)
+        self.ui.prevBtn_2.clicked.connect(self.prev_question)
+
+        self.update_page()
+
+    def update_page(self):
+        total_pages = len(self.questions)
+        if self.current_index < total_pages:
+            # Update question text
+            q = self.questions[self.current_index]
+            self.ui.question.setText(q["question"])
+
+            # Restore previous answer if exists
+            if self.answers[self.current_index] is not None:
+                self.ui.answer.setText(self.answers[self.current_index])
+            else:
+                self.ui.answer.clear()
+
+            # Show quiz page (index 0, not 1!)
+            self.ui.stackedWidget.setCurrentIndex(0)
+
+            # Update progress
+            progress = int((self.current_index / total_pages) * 100)
+            self.ui.progressBar.setValue(progress)
+
+            # Track label
+            self.ui.questions_track.setText(f"Question {self.current_index + 1} of {total_pages}")
+
+        else:
+            # Calculate score (case-insensitive check)
+            score = sum(
+                1
+                for i, a in enumerate(self.answers)
+                if a is not None and a.strip().lower() == self.questions[i]["answer"].strip().lower()
+            )
+            self.ui.result_text.setText(f"You scored {score} out of {len(self.questions)}")
+
+            # Show result page (index 1, not 0!)
+            self.ui.stackedWidget.setCurrentIndex(1)
+            self.ui.progressBar.setValue(100)
+            self.ui.questions_track.setText("Results")
+
+    def next_question(self):
+        # Save current answer
+        if self.current_index < len(self.questions):
+            self.answers[self.current_index] = self.ui.answer.toPlainText().strip()
+
+        self.current_index += 1
+        self.update_page()
+
+    def prev_question(self):
+        # If currently on result page, go back to last question
+        if self.ui.stackedWidget.currentIndex() == 1 and len(self.questions) > 0:
+            self.current_index = len(self.questions) - 1
+            self.update_page()
+            return
+
+        # Otherwise, go to previous question
         if self.current_index > 0:
             self.current_index -= 1
         self.update_page()

@@ -13,12 +13,17 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(242, 238, 230);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QWidget" name="widget" native="true">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(217, 217, 217);</string>
+       <string notr="true">background-color: rgb(242, 238, 230);
+border: 2px solid #000;
+border-radius: 15px;</string>
       </property>
       <widget class="QPushButton" name="pushButton">
        <property name="geometry">
@@ -51,7 +56,8 @@ border-radius: 5px;</string>
         <enum>Qt::RightToLeft</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(170, 0, 0);</string>
+        <string notr="true">color: rgb(170, 0, 0);
+border: none;</string>
        </property>
        <property name="text">
         <string/>
@@ -94,7 +100,8 @@ color: #000;
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(208, 208, 208);
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+border-radius:none;</string>
         </property>
         <property name="text">
          <string>Title:</string>
@@ -111,7 +118,8 @@ color: rgb(0, 0, 0);</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: 1px solid rgb(0, 0, 0);
-color: rgb(0, 0, 0);</string>
+color: rgb(0, 0, 0);
+border-radius:none;</string>
         </property>
        </widget>
        <widget class="QComboBox" name="flashcard_titles">
@@ -124,7 +132,8 @@ color: rgb(0, 0, 0);</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 0);</string>
+         <string notr="true">color: rgb(0, 0, 0);
+border-radius:none;</string>
         </property>
         <property name="maxVisibleItems">
          <number>40</number>
@@ -174,7 +183,8 @@ color: #000;</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 0);</string>
+         <string notr="true">color: rgb(0, 0, 0);
+border-radius:none;</string>
         </property>
         <item>
          <property name="text">
@@ -220,7 +230,8 @@ color: #000;</string>
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 0);</string>
+         <string notr="true">color: rgb(0, 0, 0);
+border-radius:none;</string>
         </property>
         <property name="wrapping">
          <bool>false</bool>
