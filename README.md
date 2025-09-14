@@ -7,6 +7,13 @@ For the best performance, install **Python 3.11.9**. You can download it from th
 ```bash
 python3.11 -m venv venv
 ```
+OR  
+1. Ctrl+Shift+P
+2. Select "Python: Create Environment"
+3. Select "Venv"
+4. Select "Python 3.11.9"
+5. Install requirement.txt
+6. Click "OK"
 
 ## 2. Activate the virtual environment and install dependencies
 ***For Windows: Powershell/Command Prompt***
