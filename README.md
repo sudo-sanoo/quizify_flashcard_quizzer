@@ -4,7 +4,7 @@ For the best performance, install **Python 3.11.9**. You can download it from th
 [Download Python 3.11.9](https://www.python.org/downloads/release/python-3119/)
 
 ## 1. Create a Python virtual environment
-```terminal
+```bash
 python3.11 -m venv venv
 ```
 
@@ -14,6 +14,12 @@ python3.11 -m venv venv
 venv\Scripts\activate.bat  
 pip install -r requirements.txt
 ```
+***For macOS/Linux***
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
 ## 3. Generate UI Python from Qt Designer .ui files
 ### (run these commands inside the activated venv)
 ```
@@ -29,18 +35,26 @@ pyside6-uic ui/open_quizzes_set_view.ui -o ui/open_quizzes_set_view.py
 Before running the app, create your own `flashcards.json`, `quizzes.json` files.
 
 You can do this manually or copy the example file:  
-***bash***
-```bash
-cp flashcards.example.json flashcards.json
-cp quizzes.example.json quizzes.json
-```
 ***powershell***
 ```powershell
 copy flashcards.example.json flashcards.json
 copy quizzes.example.json quizzes.json
 ```
+***bash***
+```bash
+cp flashcards.example.json flashcards.json
+cp quizzes.example.json quizzes.json
+```
 
-## 5. Launch the Application
+## 5. Configure Gemini API for Smart Quiz Generation System (SQGS)
+To use the Smart MCQ Generator, you must set up your own Gemini API key.  
+1. Get an API key from Google AI Studio: (https://aistudio.google.com/prompts/new_chat)  
+2. Create a file named .env in the project root and add:  
+```ini
+GEMINI_API_KEY=your_api_key_here
+```
+
+## 6. Launch the Application
 ```
 python main.py
 ```

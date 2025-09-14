@@ -14,6 +14,9 @@ from ui.quizzes_window import Ui_QuizzesWindow
 from ui.quizzes_set_view import Ui_MainWindow as Ui_QuizzesSetView
 from ui.open_quizzes_set_view import Ui_MainWindow as Ui_OpenQuizzesSetView
 
+from google import genai
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+
 FLASHCARD_FILE = "flashcards.json"
 QUIZZES_FILE = "quizzes.json"
 
@@ -541,6 +544,12 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
             "num_questions": num_questions,
         }
 
+        # If MCQ, generate questions using SQGS (Smart Quiz Generator System) 
+        if quiz_type == "Multiple Choice (3 Choices)":
+            flashcards_list = selected_set["flashcards"][:num_questions]
+            mcqs = generate_mcqs(flashcards_list, num_questions)
+            quiz["questions"] = mcqs
+
         # Save to quizzes.json
         with open(QUIZZES_FILE, "r") as f:
             quizzes = json.load(f)
@@ -597,6 +606,58 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
                 background-color: #555555;
             }
         """
+    
+
+#===========================================
+# HELPER FUNCTION FOR SMART MCQ GENERATION
+#===========================================
+def generate_mcqs(flashcards, num_questions):
+    prompt = f"""
+    You are a smart MCQ generator.
+    Given the following flashcards (item -> question, detail -> correct answer),
+    create {num_questions} multiple-choice questions.
+    
+    Each question must have:
+    - "question": string
+    - "options": list of 3 strings (one correct, two distractors)
+    - "correct": index (0,1,2) of correct option
+    
+    Flashcards:
+    {json.dumps(flashcards, indent=2)}
+    
+    Return ONLY valid JSON in this exact format:
+    {{
+      "questions": [
+        {{
+          "question": "...",
+          "options": ["...", "...", "..."],
+          "correct": 1
+        }}
+      ]
+    }}
+    """
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config={
+            "temperature": 0.7,
+            "response_mime_type": "application/json"
+        }
+    )
+
+    if hasattr(response, "usage_metadata") and response.usage_metadata:
+        print("Gemini Token Usage") # For me to see the token used since im using free tier, there is a rate limit
+        print("  Prompt tokens:", response.usage_metadata.prompt_token_count)
+        print("  Output tokens:", response.usage_metadata.candidates_token_count)
+        print("  Total tokens:", response.usage_metadata.total_token_count)
+
+    try:
+        data = json.loads(response.text)
+        return data["questions"]
+    except Exception as e:
+        print("Parsing error:", e)
+        return []
 
 
 # ==============================
@@ -619,12 +680,17 @@ class QuizzesSetViewWindow(QMainWindow):
         painter.end()
         self.setWindowIcon(QIcon(pixmap))
         
-        # Example: list of questions (replace with your actual quiz data)
-        self.questions = [
-            {"question": "Question 1?", "options": ["A", "B", "C"], "correct": 0},
-            {"question": "Question 2?", "options": ["X", "Y", "Z"], "correct": 1},
-            {"question": "Question 3?", "options": ["M", "N", "O"], "correct": 2},
-        ]
+        with open(QUIZZES_FILE, "r") as f:
+            quizzes = json.load(f)
+
+        quiz = quizzes[quiz_index]
+        self.setWindowTitle(quiz.get("title", "Quiz"))
+
+        self.questions = quiz.get("questions", [])
+        if not self.questions:
+            QMessageBox.warning(self, "Error", "No questions found for this quiz.")
+            self.close()
+            return
         
         self.answers = [None] * len(self.questions)
         self.current_index = 0
@@ -647,9 +713,15 @@ class QuizzesSetViewWindow(QMainWindow):
             # Update question page
             q = self.questions[self.current_index]
             self.ui.question.setText(q["question"])
-            self.ui.checkBox.setText(q["options"][0])
-            self.ui.checkBox_2.setText(q["options"][1])
-            self.ui.checkBox_3.setText(q["options"][2])
+
+            self.ui.checkBox.setText(truncate_text(q["options"][0]))
+            self.ui.checkBox.setToolTip(q["options"][0])
+
+            self.ui.checkBox_2.setText(truncate_text(q["options"][1]))
+            self.ui.checkBox_2.setToolTip(q["options"][1])
+
+            self.ui.checkBox_3.setText(truncate_text(q["options"][2]))
+            self.ui.checkBox_3.setToolTip(q["options"][2])
             
             self.option_group.setExclusive(False)
             self.ui.checkBox.setChecked(False)
@@ -691,6 +763,10 @@ class QuizzesSetViewWindow(QMainWindow):
             self.current_index -= 1
         self.update_page()
 
+# Helper function outside class for truncating long answer
+def truncate_text(text, max_len=50):
+    return text if len(text) <= max_len else text[:max_len - 1] + "…"
+
 
 # ==============================
 # OPEN-ENDED QUIZZES SET VIEW WINDOW
@@ -720,6 +796,7 @@ class OpenQuizzesSetViewWindow(QMainWindow):
             return
 
         self.quiz = quizzes[quiz_index]
+        self.setWindowTitle(self.quiz["title"])
 
         with open(FLASHCARD_FILE, "r") as f:
             flashcards = json.load(f)
