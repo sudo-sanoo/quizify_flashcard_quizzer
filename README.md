@@ -58,7 +58,7 @@ To use the Smart MCQ Generator, you must set up your own Gemini API key.
 1. Get an API key from Google AI Studio: (https://aistudio.google.com/prompts/new_chat)  
 2. Create a file named .env in the project root and add:  
 ```ini
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY="your_api_key_here"
 ```
 
 ## 6. Launch the Application
