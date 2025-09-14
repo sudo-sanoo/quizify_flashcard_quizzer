@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
     QWidget, QTableWidgetItem, QButtonGroup
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QPainter, QFont, QPixmap, QIcon
 from ui.main_window import Ui_MainWindow
 from ui.flashcard_window import Ui_FlashcardWindow
 from ui.flashcard_set_view import Ui_MainWindow as Ui_FlashcardSetView
@@ -26,6 +27,16 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.setFixedSize(self.size())
         self.setWindowTitle("Quizify")
+
+        # Fir logo
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
 
         self.flashcard_window = None
         self.quizzes_window = None
@@ -261,6 +272,15 @@ class FlashcardWindow(QMainWindow, Ui_FlashcardWindow):
         self.setWindowTitle("Quizify - Flashcard")
         self.parent_window = parent_window
 
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
+
         self.pushButton.clicked.connect(self.create_flashcard_set)
         self.pushButton_2.clicked.connect(self.reset_inputs)
 
@@ -367,6 +387,16 @@ class FlashcardSetViewWindow(QMainWindow, Ui_FlashcardSetView):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())
+
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
+
         self.set_index = set_index
 
         # Load flashcards
@@ -430,6 +460,15 @@ class QuizzesWindow(QMainWindow, Ui_QuizzesWindow):
         self.setFixedSize(self.size())
         self.setWindowTitle("Quizify - Create Quiz")
         self.parent_window = parent
+
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
 
         if not os.path.exists(QUIZZES_FILE):
             with open(QUIZZES_FILE, "w") as f:
@@ -570,6 +609,15 @@ class QuizzesSetViewWindow(QMainWindow):
         self.ui = Ui_QuizzesSetView()
         self.ui.setupUi(self)
         self.setFixedSize(self.size())
+
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
         
         # Example: list of questions (replace with your actual quiz data)
         self.questions = [
@@ -653,6 +701,15 @@ class OpenQuizzesSetViewWindow(QMainWindow):
         self.ui = Ui_OpenQuizzesSetView()
         self.ui.setupUi(self)
         self.setFixedSize(self.size())
+
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        font = QFont("Segoe UI Emoji", 48)
+        painter.setFont(font)
+        painter.drawText(pixmap.rect(), Qt.AlignCenter, "📖")
+        painter.end()
+        self.setWindowIcon(QIcon(pixmap))
 
         # Load quizzes.json
         with open(QUIZZES_FILE, "r") as f:
